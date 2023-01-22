@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('google_id')->nullable();
-            $table->string('password')->nullable();
-            $table->rememberToken();
+            $table->uuid('course_id');
+            $table->string('title', 191);
+            $table->text('description')->nullable();
+            $table->dateTime('deadline')->nullable();
             $table->timestamps();
+
+            $table->foreign('course_id')->references('id')->on('courses')
+                ->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tasks');
     }
 };
